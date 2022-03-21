@@ -23,6 +23,7 @@ export default {
       src: '@/plugins/Client/vue-json-excel',
       mode: 'client',
     },
+    { src: '@/plugins/Client/vue-html2pdf', mode: 'client' },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

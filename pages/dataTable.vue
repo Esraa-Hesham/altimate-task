@@ -1,5 +1,5 @@
 <template>
-  <div class="data-table">
+  <div class="data-table my-5">
     <template>
       <div class="user-table">
         <div class="container-xl">
@@ -11,48 +11,53 @@
                     <h2>Manage <b>Comments</b></h2>
                   </div>
                   <div class="col-sm-6">
-                    <b-button @click="addCommentPopup()"
+                    <b-button class="btn btn-create" @click="addCommentPopup()"
                       >Add New Comment</b-button
                     >
 
-                    <downloadexcel
-                      class="btn"
-                      :fetch="fetchData"
-                      :fields="comments"
-                      :before-generate="startDownload"
-                      :before-finish="finishDownload"
+                    <v-layout>
+                      <download-excel
+                        class="btn btn-excel"
+                        :data="comments"
+                        :before-generate="startDownload"
+                      >
+                        Download Excel
+                      </download-excel>
+                    </v-layout>
+                    <b-button class="btn btn-pdf" @click="prientPDF"
+                      >Download PDf</b-button
                     >
-                      Download Excel
-                    </downloadexcel>
                   </div>
                 </div>
               </div>
-              <table class="table table-striped table-hover">
-                <thead>
-                  <tr>
-                    <th>ID</th>
-                    <th>Name</th>
-                    <th>Email</th>
-                    <th>Body</th>
-                    <th>Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="comment in comments" :key="comment.id">
-                    <td>{{ comment.id }}</td>
-                    <td>{{ comment.name }}</td>
-                    <td>{{ comment.email }}</td>
-                    <td>{{ comment.body }}</td>
-                    <td>
-                      <b-button
-                        class="btn btn-warning"
-                        @click="editCommitPopup()"
-                        >Edit</b-button
-                      >
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+              <div id="table_id">
+                <table class="table table-striped table-hover">
+                  <thead>
+                    <tr>
+                      <th>ID</th>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Body</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr v-for="comment in comments" :key="comment.id">
+                      <td>{{ comment.id }}</td>
+                      <td>{{ comment.name }}</td>
+                      <td>{{ comment.email }}</td>
+                      <td>{{ comment.body }}</td>
+                      <td>
+                        <b-button
+                          class="btn btn-warning"
+                          @click="editCommitPopup(comment.id)"
+                          >Edit</b-button
+                        >
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>
@@ -169,14 +174,25 @@ export default {
       commentToEdit: {},
       userToAdd: {},
       comments: [],
+      name: '',
     }
   },
+  //fetch data from API
   async fetch() {
     this.comments = await fetch(
       'https://jsonplaceholder.typicode.com/comments'
     ).then((res) => res.json())
   },
   methods: {
+    //PDF
+    prientPDF() {
+      var printContents = document.getElementById('table_id').innerHTML
+      var originalContents = document.body.innerHTML
+      document.body.innerHTML = printContents
+      window.print()
+      document.body.innerHTML = originalContents
+    },
+    // Add User
     addCommentPopup() {
       this.$bvModal.show('my-modal')
     },
@@ -191,24 +207,44 @@ export default {
       this.comments.push(newRow)
       this.$bvModal.hide('my-modal')
     },
-    editCommitPopup() {
-      this.$bvModal.show('my-modal-edit')
-    },
-
-    edituser(commentId) {
+    //Edit User
+    editCommitPopup(commentId) {
       this.comments.forEach((comment) => {
         if (comment.id == commentId) {
           this.commentToEdit = Object.assign({}, comment)
         }
       }),
-        this.$bvModal.hide('my-modal-edit')
+        this.$bvModal.show('my-modal-edit')
     },
+
+    edituser(commentId) {
+      this.comments = this.comments.map((comment) => {
+        if (comment.id == commentId) {
+          comment = this.commentToEdit
+        }
+        return comment
+      })
+      this.$bvModal.hide('my-modal-edit')
+    },
+    // alert to download Excel
     startDownload() {
-      alert('show loading')
-    },
-    finishDownload() {
-      alert('hide loading')
+      alert(' Loading Download Excel')
     },
   },
 }
 </script>
+<style>
+.btn {
+  color: #eee;
+  border-radius: 10px;
+}
+.btn-excel {
+  background-color: rgb(10, 168, 63);
+}
+.btn-create {
+  background-color: rgb(59, 117, 5);
+}
+.btn-pdf {
+  background-color: rgb(136, 53, 15);
+}
+</style>
