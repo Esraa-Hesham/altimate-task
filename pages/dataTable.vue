@@ -197,7 +197,7 @@ export default {
       this.$bvModal.show('my-modal')
     },
     addComment() {
-      let lastId = this.comments.length
+      let lastId = this.comments.length + 1
       var newRow = {
         id: lastId++,
         name: this.name,
@@ -205,6 +205,9 @@ export default {
         body: this.body,
       }
       this.comments.push(newRow)
+      this.name = ''
+      this.email = ''
+      this.body = ''
       this.$bvModal.hide('my-modal')
     },
     //Edit User
