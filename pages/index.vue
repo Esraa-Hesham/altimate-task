@@ -1,7 +1,6 @@
-<template></template>
-
+<template>
+  <div class="">HOME PAGE</div>
+</template>
 <script>
-export default {
-  name: 'IndexPage',
-}
+export default {}
 </script>
