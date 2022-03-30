@@ -11,6 +11,9 @@ export default {
       { hid: 'description', name: 'description', content: '' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
+    script: [
+      { src: 'https://cdnjs.cloudflare.com/ajax/libs/vue/2.5.17/vue.js' },
+    ],
     link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
   },
 

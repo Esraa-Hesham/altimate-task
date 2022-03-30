@@ -30,6 +30,7 @@
                   </div>
                 </div>
               </div>
+
               <div id="table_id">
                 <table class="table table-striped table-hover">
                   <thead>
@@ -38,7 +39,7 @@
                       <th>Name</th>
                       <th>Email</th>
                       <th>Body</th>
-                      <th>Actions</th>
+                      <th id="actionsCul">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -47,7 +48,7 @@
                       <td>{{ comment.name }}</td>
                       <td>{{ comment.email }}</td>
                       <td>{{ comment.body }}</td>
-                      <td>
+                      <td class="editBtn">
                         <b-button
                           class="btn btn-warning"
                           @click="editCommitPopup(comment.id)"
@@ -166,6 +167,7 @@
 <script>
 export default {
   name: 'data-table',
+
   data() {
     return {
       name: '',
@@ -186,11 +188,18 @@ export default {
   methods: {
     //PDF
     prientPDF() {
-      var printContents = document.getElementById('table_id').innerHTML
-      var originalContents = document.body.innerHTML
+      let oldHtml = Object.assign(document.body.innerHTML, {})
+      let actionsCul = document.getElementById('actionsCul')
+      actionsCul.style.display = 'none'
+
+      let btnEdit = document.querySelectorAll('.editBtn')
+      for (let i = 0; i < btnEdit.length; i++) {
+        btnEdit[i].style.display = 'none'
+      }
+      let printContents = document.getElementById('table_id').innerHTML
       document.body.innerHTML = printContents
       window.print()
-      document.body.innerHTML = originalContents
+      document.body.innerHTML = oldHtml
     },
     // Add User
     addCommentPopup() {

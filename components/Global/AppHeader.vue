@@ -19,7 +19,7 @@ export default {
 </script>
 <style>
 .navbar {
-  background-color: rgb(230, 100, 235);
+  background-color: rgb(153, 152, 153);
 }
 .navbar__brand {
   font-size: 2.2rem;
